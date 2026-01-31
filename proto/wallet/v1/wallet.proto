@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package wallet.v1;
+
+option go_package = "github.com/you/wallet/gen/walletv1;walletv1";
+
+service WalletService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
+
+  rpc Deposit(DepositRequest) returns (DepositResponse);
+  rpc Withdraw(WithdrawRequest) returns (WithdrawResponse);
+  rpc Transfer(TransferRequest) returns (TransferResponse);
+
+  rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+}
+
+message Transaction {
+  string id = 1;
+  string type = 2; // deposit|withdraw|transfer
+  string from_user_id = 3;
+  string to_user_id = 4;
+  int64 amount = 5; // cents
+  string created_at = 6;
+  string status = 7; // success|failed
+  string reason = 8;
+}
+
+message CreateUserRequest { string email = 1; }
+message CreateUserResponse { User user = 1; }
+
+message GetBalanceRequest { string user_id = 1; }
+message GetBalanceResponse { int64 balance = 1; }
+
+message DepositRequest {
+  string user_id = 1;
+  int64 amount = 2;
+}
+message DepositResponse { int64 balance = 1; }
+
+message WithdrawRequest {
+  string user_id = 1;
+  int64 amount = 2;
+}
+message WithdrawResponse { int64 balance = 1; }
+
+message TransferRequest {
+  string from_user_id = 1;
+  string to_user_id = 2;
+  int64 amount = 3;
+}
+message TransferResponse {
+  int64 from_balance = 1;
+  int64 to_balance = 2;
+}
+
+message ListTransactionsRequest {
+  string user_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message ListTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
