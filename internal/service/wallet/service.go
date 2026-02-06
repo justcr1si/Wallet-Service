@@ -1,6 +1,7 @@
 package wallet
 
 import (
+	"context"
 	"payment_service/internal/config"
 	"payment_service/internal/repo/postgres"
 
@@ -8,17 +9,17 @@ import (
 )
 
 type Service struct {
-	storage *postgres.Storage
+	Storage *postgres.Storage
 }
 
-func New(cfg *config.Config) (*Service, error) {
-	storage, err := postgres.New(cfg)
+func New(ctx context.Context, cfg *config.Config) (*Service, error) {
+	storage, err := postgres.New(ctx, cfg)
 
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
 
 	return &Service{
-		storage: storage,
+		Storage: storage,
 	}, nil
 }

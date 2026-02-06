@@ -1,39 +1,43 @@
 package postgres
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
+
 	"payment_service/internal/config"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Storage struct {
-	db *sql.DB
+	DB *pgxpool.Pool
 }
 
-func New(cfg *config.Config) (*Storage, error) {
+func New(ctx context.Context, cfg *config.Config) (*Storage, error) {
 	const op = "storage.postgres.New"
 
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		cfg.Database.Host, 
-		cfg.Database.Port, 
-		cfg.Database.User, 
-		cfg.Database.Password, 
+	dsn := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		cfg.Database.Host,
+		cfg.Database.Port,
+		cfg.Database.User,
+		cfg.Database.Password,
 		cfg.Database.Name,
 	)
 
-	db, err := sql.Open("postgres", psqlInfo)
-
+	pool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	defer db.Close()
-
-	if err = db.Ping(); err != nil {
-		panic(err)
+	if err := pool.Ping(ctx); err != nil {
+		pool.Close()
+		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	return &Storage{db: db}, nil
+	return &Storage{DB: pool}, nil
+}
 
+func (s *Storage) Close() {
+	s.DB.Close()
 }
