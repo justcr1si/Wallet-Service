@@ -1,5 +1,8 @@
 DB_URL=postgres://payment:payment@localhost:5432/payment?sslmode=disable
 
+make gen:
+	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/wallet/v1/wallet.proto
+
 db-up:
 	docker compose up -d
 

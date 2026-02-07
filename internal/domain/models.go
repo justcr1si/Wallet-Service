@@ -69,6 +69,6 @@ type ListTransactionsRequest struct {
 	Offset int64
 }
 
-type ListTRansactionsResponse struct {
+type ListTransactionsResponse struct {
 	Transactions []Transaction
 }

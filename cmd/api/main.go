@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"payment_service/internal/app"
 	"payment_service/internal/config"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -13,9 +15,16 @@ func main() {
 
 	fmt.Println(cfg)
 
-	app := app.New(ctx, cfg)
+	application, err := app.New(ctx, cfg)
 
-	defer app.Repo.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer application.Close()
 
-	fmt.Println(app)
+	fmt.Println(application)
+
+	if err := application.Run(ctx); err != nil {
+		log.Fatal(err)
+	}
 }

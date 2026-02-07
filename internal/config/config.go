@@ -11,6 +11,11 @@ import (
 type Config struct {
 	Env      string   `yaml:"env"`
 	Database Database `yaml:"database"`
+	GRPC     GRPC     `yaml:"grpc"`
+}
+
+type GRPC struct {
+	Port string `yaml:"port"`
 }
 
 type Database struct {

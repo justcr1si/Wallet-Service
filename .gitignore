@@ -1,6 +1,5 @@
 docker-compose.yml
 dockerfile
 .gitignore
-go.mod
-go.sum
 config.yaml
+.vscode/

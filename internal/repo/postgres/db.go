@@ -30,11 +30,13 @@ func New(ctx context.Context, cfg *config.Config) (*Storage, error) {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
+	defer pool.Close()
+
 	if err := pool.Ping(ctx); err != nil {
 		pool.Close()
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
-
+	
 	return &Storage{DB: pool}, nil
 }
 

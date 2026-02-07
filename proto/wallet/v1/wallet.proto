@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package wallet.v1;
 
-option go_package = "github.com/you/wallet/gen/walletv1;walletv1";
-
 service WalletService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
