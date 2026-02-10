@@ -1,5 +1,6 @@
 package postgres
 
+<<<<<<< HEAD
 import (
 	"context"
 	"payment_service/internal/domain"
@@ -17,3 +18,8 @@ type WalletRepo interface {
 	UpdateBalance(ctx context.Context, tx pgx.Tx, userID int64, delta int64) error
 	InsertTransaction(ctx context.Context, tx pgx.Tx, t domain.Transaction) error
 }
+=======
+type WalletServiceServer struct {
+	
+}
+>>>>>>> 130ed7e (fix: regenerated code using protoc, feat: created handler implementing gprc server interface)

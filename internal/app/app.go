@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+<<<<<<< HEAD
 	// "net"
 	"payment_service/internal/config"
 	// wallet_handler "payment_service/internal/grpc/wallet"
@@ -11,16 +12,31 @@ import (
 
 	// log "github.com/sirupsen/logrus"
 	// "google.golang.org/grpc"
+=======
+	pb "payment_service/gen"
+	"payment_service/internal/config"
+	handler "payment_service/internal/grpc/wallet"
+	"payment_service/internal/repo/postgres"
+	"payment_service/internal/service/wallet"
+
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+>>>>>>> 130ed7e (fix: regenerated code using protoc, feat: created handler implementing gprc server interface)
 )
 
 type App struct {
 	Cfg     *config.Config
-	Service *wallet.Service
+	Service *service.Service
 	Repo    *postgres.Storage
 }
 
+<<<<<<< HEAD
 func New(ctx context.Context, cfg *config.Config) (*App, error) {
 	service, err := wallet.New(ctx, cfg)
+=======
+func New(ctx context.Context, cfg *config.Config) *App {
+	service, err := service.New(ctx, cfg)
+>>>>>>> 130ed7e (fix: regenerated code using protoc, feat: created handler implementing gprc server interface)
 
 	if err != nil {
 		return nil, err
@@ -32,6 +48,10 @@ func New(ctx context.Context, cfg *config.Config) (*App, error) {
 		repo.Close()
 		return nil, err
 	}
+
+	grpcServer := grpc.NewServer()
+	h := handler.New(service)
+	pb.RegisterWalletServiceServer(grpcServer, h)
 
 	return &App{
 		Cfg:     cfg,
